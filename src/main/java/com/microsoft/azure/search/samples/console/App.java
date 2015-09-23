@@ -9,7 +9,7 @@ import java.util.*;
 
 public class App
 {
-    private static final String SERVICE_NAME = [Enter your Azure Search Service Name];
+    private static final String SERVICE_NAME = [Enter your Azure Search Service Name - excluding .search.windows.net];
     private static final String INDEX_NAME = "sample";
     private static final String API_KEY = [Enter your Azure Search Service API Key];
 
