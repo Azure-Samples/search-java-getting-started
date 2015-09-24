@@ -4,7 +4,7 @@ platforms: java
 author: liamca
 ---
 
-# Getting Started with Azure Search using JAVA
+# Getting Started with Azure Search using Java
 
 This is a sample of how to interact with Azure Search using Java.  Not only does it execute most of the common API requests against Azure Search, but it also implements some of the best practices such as handling retries, etc.  
 
