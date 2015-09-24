@@ -1,7 +1,7 @@
 ---
 services: search
 platforms: java
-author: azure
+author: liamca
 ---
 
 # Getting Started with Azure Search using JAVA
