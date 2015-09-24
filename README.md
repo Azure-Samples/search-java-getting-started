@@ -1,6 +1,6 @@
 ---
-services: Azure Search, Java
-platforms: Azure
+services: search
+platforms: java
 author: azure
 ---
 
