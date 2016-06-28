@@ -19,3 +19,7 @@ When you run the sample, it will do the following:
 * Do a more complex search - searchAllFeatures(indexClient);
 * Do an item lookup - lookup(indexClient);
 * Perform a suggest query (used for type ahead) - suggest(indexClient);
+
+---
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
