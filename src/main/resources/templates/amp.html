@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Azure Media Player</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//amp.azure.net/libs/amp/latest/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
+    <script src="//amp.azure.net/libs/amp/latest/azuremediaplayer.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+</head>
+
+
+<body>
+    <h1>Demo mediaplayer</h1>
+
+<div id="images" />
+<div id="current"></div>
+
+    <video id="azuremediaplayer" class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0"> </video>
+    <script>
+
+         function getParameterByName(name) {
+            var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+            return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+         }
+
+         var playSettings = {
+            autoplay: true,
+            controls: true,
+            width: "640",
+            height: "400",
+            poster: ""
+        };
+
+        if (getParameterByName('url') === null ){
+          alert('no file selected');
+        }else{
+          $(document).ready(function(){
+            $('#current').text(getParameterByName('url'));
+            //$('#current').css('visibility','hidden');
+            var mPlayer = amp("azuremediaplayer", playSettings);
+            mPlayer.src([{ src: getParameterByName('url'),type: "application/vnd.ms-sstr+xml" }, ]);
+      });
+    }
+
+    </script>
+</body>
+</html>

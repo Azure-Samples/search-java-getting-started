@@ -1,25 +1,13 @@
----
-services: search
-platforms: java
-author: liamca
----
+# Azure Search Services 
 
-# Getting Started with Azure Search using Java
+This is based on the Azure-Samples/search-java-getting-started, changed/added the following:
+* Gradleized it....
+* Removed the App.java and moved the methods in the Test FW
+* Changed System.out into Logger stuff
+* Added TestNG testCases...so you can run and test and change your expectations
+* Just change the following PARAMS in the code:
+  * SERVICE_NAME = "YOUR SERVICE NAME, just the name not the domain extension!!!";
+  * API_KEY = "YOUR API KEY";
 
-This is a sample of how to interact with Azure Search using Java.  Not only does it execute most of the common API requests against Azure Search, but it also implements some of the best practices such as handling retries, etc.  
+Goal was to make learning Azure Search more accessible, just run gradle test 
 
-## Running this sample
-
-To run this sample, you will need to have an Azure Search service and add your Search Service name as well as API key for your Search service tot he App.java file located under \src\main\java\com\microsoft\azure\search\samples\console.  After that, you should be able to simply load it and run it.  One thing to note is that you will need to have JDK 1.7 or higher.   
-
-When you run the sample, it will do the following:
-* Create an Index - createIndex(indexClient, true);
-* Upload documents to an Index - indexData(indexClient);
-* Perform a simple search query - searchSimple(indexClient);
-* Do a more complex search - searchAllFeatures(indexClient);
-* Do an item lookup - lookup(indexClient);
-* Perform a suggest query (used for type ahead) - suggest(indexClient);
-
----
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
