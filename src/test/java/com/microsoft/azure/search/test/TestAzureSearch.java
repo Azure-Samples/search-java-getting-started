@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 public class TestAzureSearch {
 
 
-    private static final String SERVICE_NAME = "YOUR SRV NAME";
+    private static final String SERVICE_NAME = "YOUR SRVC NAME";
     private static final String INDEX_NAME = "sample";
     private static final String API_KEY = "YOUR API KEY";
     private static final Logger logger = Logger.getLogger("AzureSearchTest");

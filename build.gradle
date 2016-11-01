@@ -30,23 +30,10 @@ test {
 
 dependencies {
 
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.springframework.boot:spring-boot-devtools")
-    compile("org.springframework.boot:spring-boot-configuration-processor")
-    compile 'org.apache.httpcomponents:httpclient:4.5'
-    compile group: 'com.sun.jersey', name: 'jersey-client', version: '1.9.1'
-    compile group: 'javax.inject', name: 'javax.inject', version: '1'
-    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
-    compile group: 'javax.mail', name: 'mail', version: '1.4.7'
-
-
 
     compile("com.fasterxml.jackson.core:jackson-databind")
-
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.7'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.7'
-
-
     compile group: 'org.testng', name: 'testng', version: '6.9.13.6'
     testCompile group: 'org.testng', name: 'testng', version: '6.9.13.6'
     testCompile("org.springframework.boot:spring-boot-starter-test")
