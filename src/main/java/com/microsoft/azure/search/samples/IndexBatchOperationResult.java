@@ -4,6 +4,7 @@ public class IndexBatchOperationResult {
     private String key;
     private boolean status;
     private String errorMessage;
+    private int statusCode;
 
     public String getKey() {
         return key;
@@ -27,5 +28,13 @@ public class IndexBatchOperationResult {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public int getStatusCode() {
+        return this.statusCode;
+    }
+
+    public void setStatusCode(int status) { 
+        this.statusCode = statusCode; 
     }
 }
