@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SearchIndexClient {
-    private static final String API_VERSION = "2015-02-28";
+    private static final String API_VERSION = "2016-09-01";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final String serviceName;
