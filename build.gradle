@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+
+bootRepackage.enabled = false
+
+jar {
+    baseName = 'azuresearch-demo'
+    version =  '0.1.0'
+}
+
+repositories {
+   mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+test {
+    useTestNG() {
+    }
+}
+
+dependencies {
+
+
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.7'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.7'
+    compile group: 'org.testng', name: 'testng', version: '6.9.13.6'
+    testCompile group: 'org.testng', name: 'testng', version: '6.9.13.6'
+}
+
