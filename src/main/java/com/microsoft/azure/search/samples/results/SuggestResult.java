@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @JsonIgnoreProperties(value = { "@odata.context" })
-public class IndexSuggestResult {
+public class SuggestResult {
     private Collection<SuggestHit> hits;
     private Double coverage;
 

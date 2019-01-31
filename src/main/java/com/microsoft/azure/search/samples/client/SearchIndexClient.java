@@ -3,13 +3,13 @@ package com.microsoft.azure.search.samples.client;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
-import com.microsoft.azure.search.samples.demo.IndexBatchOperation;
+import com.microsoft.azure.search.samples.demo.IndexOperation;
 import com.microsoft.azure.search.samples.results.IndexBatchResult;
-import com.microsoft.azure.search.samples.results.IndexSearchResult;
-import com.microsoft.azure.search.samples.results.IndexSuggestResult;
+import com.microsoft.azure.search.samples.results.SearchResult;
+import com.microsoft.azure.search.samples.results.SuggestResult;
 import com.microsoft.azure.search.samples.index.IndexDefinition;
-import com.microsoft.azure.search.samples.options.IndexSearchOptions;
-import com.microsoft.azure.search.samples.options.IndexSuggestOptions;
+import com.microsoft.azure.search.samples.options.SearchOptions;
+import com.microsoft.azure.search.samples.options.SuggestOptions;
 
 import java.io.*;
 import java.net.*;
@@ -75,7 +75,7 @@ public class SearchIndexClient {
         return true;
     }
 
-    public IndexBatchResult indexBatch(final Collection<IndexBatchOperation> operations) throws IOException {
+    public IndexBatchResult indexBatch(final Collection<IndexOperation> operations) throws IOException {
         return withHttpRetry(new RetriableHttpOperation<IndexBatchResult>() {
             @Override
             public IndexBatchResult run() throws HttpRetryException, IOException {
@@ -91,25 +91,25 @@ public class SearchIndexClient {
         });
     }
 
-    public IndexSearchResult search(final String search, final IndexSearchOptions options) throws IOException {
-        return withHttpRetry(new RetriableHttpOperation<IndexSearchResult>() {
+    public SearchResult search(final String search, final SearchOptions options) throws IOException {
+        return withHttpRetry(new RetriableHttpOperation<SearchResult>() {
             @Override
-            public IndexSearchResult run() throws HttpRetryException, IOException {
+            public SearchResult run() throws HttpRetryException, IOException {
                 HttpURLConnection connection = httpRequest(buildIndexSearchUrl(search, options), "GET");
                 throwOnHttpError(connection);
-                IndexSearchResult result = OBJECT_MAPPER.readValue(connection.getInputStream(), IndexSearchResult.class);
+                SearchResult result = OBJECT_MAPPER.readValue(connection.getInputStream(), SearchResult.class);
                 return result;
             }
         });
     }
 
-    public IndexSuggestResult suggest(final String search, final String suggesterName, final IndexSuggestOptions options) throws IOException {
-        return withHttpRetry(new RetriableHttpOperation<IndexSuggestResult>() {
+    public SuggestResult suggest(final String search, final String suggesterName, final SuggestOptions options) throws IOException {
+        return withHttpRetry(new RetriableHttpOperation<SuggestResult>() {
             @Override
-            public IndexSuggestResult run() throws HttpRetryException, IOException {
+            public SuggestResult run() throws HttpRetryException, IOException {
                 HttpURLConnection connection = httpRequest(buildIndexSuggestUrl(search, suggesterName, options), "GET");
                 throwOnHttpError(connection);
-                IndexSuggestResult result = OBJECT_MAPPER.readValue(connection.getInputStream(), IndexSuggestResult.class);
+                SuggestResult result = OBJECT_MAPPER.readValue(connection.getInputStream(), SuggestResult.class);
                 return result;
             }
         });
@@ -169,7 +169,7 @@ public class SearchIndexClient {
                 this.serviceName, this.indexName, escapePathSegment(key), API_VERSION);
     }
 
-    private String buildIndexSearchUrl(String search, IndexSearchOptions options) throws IOException {
+    private String buildIndexSearchUrl(String search, SearchOptions options) throws IOException {
         StringBuilder buffer = new StringBuilder();
         buffer.append(String.format("https://%s.search.windows.net/indexes/%s/docs?api-version=%s&search=%s&$count=%s",
                 this.serviceName, this.indexName, API_VERSION, URLEncoder.encode(search, "UTF-8"), options.getIncludeCount()));
@@ -222,7 +222,7 @@ public class SearchIndexClient {
         return buffer.toString();
     }
 
-    private String buildIndexSuggestUrl(String search, String suggesterName, IndexSuggestOptions options) throws IOException {
+    private String buildIndexSuggestUrl(String search, String suggesterName, SuggestOptions options) throws IOException {
         StringBuilder buffer = new StringBuilder();
         buffer.append(String.format("https://%s.search.windows.net/indexes/%s/docs/suggest?api-version=%s&search=%s&suggesterName=%s",
                 this.serviceName, this.indexName, API_VERSION, URLEncoder.encode(search, "UTF-8"), suggesterName));
@@ -304,13 +304,13 @@ public class SearchIndexClient {
     }
 
     private static class IndexBatch {
-        private Collection<IndexBatchOperation> value;
+        private Collection<IndexOperation> value;
 
         public IndexBatch () {
-            value = new ArrayList<IndexBatchOperation>();
+            value = new ArrayList<IndexOperation>();
         }
 
-        public Collection<IndexBatchOperation> getValue() {
+        public Collection<IndexOperation> getValue() {
             return value;
         }
     }

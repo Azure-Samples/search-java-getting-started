@@ -1,6 +1,6 @@
 package com.microsoft.azure.search.samples.options;
 
-public class IndexSearchOptions {
+public class SearchOptions {
     private boolean includeCount;
     private String filter;
     private String orderby;

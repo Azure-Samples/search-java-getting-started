@@ -9,22 +9,22 @@ import java.util.Map;
  * Represents a batch operation in an indexing request. Only "upload" and "delete" are modeled here, there is
  * also "merge" and "mergeOrUpload" that can capture different scenarios.
  */
-public abstract class IndexBatchOperation {
+public abstract class IndexOperation {
 
-    public static IndexBatchOperation upload(Map<String, Object> document) {
+    public static IndexOperation upload(Map<String, Object> document) {
         IndexUploadOperation operation = new IndexUploadOperation();
         operation.setDocument(document);
         return operation;
     }
 
-    public static IndexBatchOperation delete(String keyName, String keyValue) {
+    public static IndexOperation delete(String keyName, String keyValue) {
         IndexDeleteOperation operation = new IndexDeleteOperation();
         operation.setKeyName(keyName);
         operation.setKeyValue(keyValue);
         return operation;
     }
 
-    public static class IndexUploadOperation extends IndexBatchOperation {
+    public static class IndexUploadOperation extends IndexOperation {
         private Map<String, Object> document;
 
         public Map<String, Object> getDocument() {
@@ -44,7 +44,7 @@ public abstract class IndexBatchOperation {
         }
     }
 
-    public static class IndexDeleteOperation extends IndexBatchOperation {
+    public static class IndexDeleteOperation extends IndexOperation {
         private String keyName;
         private String keyValue;
 

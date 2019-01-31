@@ -1,6 +1,6 @@
 package com.microsoft.azure.search.samples.options;
 
-public class IndexSuggestOptions {
+public class SuggestOptions {
     private String filter;
     private String orderby;
     private String select;

@@ -1,15 +1,14 @@
 package com.microsoft.azure.search.samples.demo;
 
 import com.microsoft.azure.search.samples.client.SearchIndexClient;
-import com.microsoft.azure.search.samples.demo.IndexBatchOperation;
 import com.microsoft.azure.search.samples.index.IndexDefinition;
 import com.microsoft.azure.search.samples.index.IndexField;
-import com.microsoft.azure.search.samples.options.IndexSearchOptions;
-import com.microsoft.azure.search.samples.options.IndexSuggestOptions;
+import com.microsoft.azure.search.samples.options.SearchOptions;
+import com.microsoft.azure.search.samples.options.SuggestOptions;
 import com.microsoft.azure.search.samples.results.IndexBatchOperationResult;
 import com.microsoft.azure.search.samples.results.IndexBatchResult;
-import com.microsoft.azure.search.samples.results.IndexSearchResult;
-import com.microsoft.azure.search.samples.results.IndexSuggestResult;
+import com.microsoft.azure.search.samples.results.SearchResult;
+import com.microsoft.azure.search.samples.results.SuggestResult;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -67,12 +66,12 @@ public class App
     static void indexData(SearchIndexClient indexClient) throws IOException {
         // In this case we create sample data in-memory. Typically this will come from another database, file or
         // API and will be turned into objects with the desired shape for indexing
-        ArrayList<IndexBatchOperation> operations = new ArrayList<IndexBatchOperation>();
-        operations.add(IndexBatchOperation.upload(newDocument("1", "first name", 10, "aaa", "bbb")));
-        operations.add(IndexBatchOperation.upload(newDocument("2", "second name", 11, "aaa", "ccc")));
-        operations.add(IndexBatchOperation.upload(newDocument("3", "second second name", 12, "aaa", "eee")));
-        operations.add(IndexBatchOperation.upload(newDocument("4", "third name", 13, "ddd", "eee")));
-        operations.add(IndexBatchOperation.delete("id", "5"));
+        ArrayList<IndexOperation> operations = new ArrayList<IndexOperation>();
+        operations.add(IndexOperation.upload(newDocument("1", "first name", 10, "aaa", "bbb")));
+        operations.add(IndexOperation.upload(newDocument("2", "second name", 11, "aaa", "ccc")));
+        operations.add(IndexOperation.upload(newDocument("3", "second second name", 12, "aaa", "eee")));
+        operations.add(IndexOperation.upload(newDocument("4", "third name", 13, "ddd", "eee")));
+        operations.add(IndexOperation.delete("id", "5"));
 
         // consider handling HttpRetryException and backoff (wait 30, 60, 90 seconds) and retry
         IndexBatchResult result = indexClient.indexBatch(operations);
@@ -85,18 +84,18 @@ public class App
     }
 
     static void searchSimple(SearchIndexClient indexClient) throws IOException {
-        IndexSearchOptions options = new IndexSearchOptions();
+        SearchOptions options = new SearchOptions();
         options.setIncludeCount(true);
-        IndexSearchResult result = indexClient.search("name", options);
+        SearchResult result = indexClient.search("name", options);
         System.out.printf("Found %s hits\n", result.getCount());
-        for (IndexSearchResult.SearchHit hit: result.getHits()) {
+        for (SearchResult.SearchHit hit: result.getHits()) {
             System.out.printf("\tid: %s, name: %s, score: %s\n",
                     hit.getDocument().get("id"), hit.getDocument().get("name"), hit.getScore());
         }
     }
 
     static void searchAllFeatures(SearchIndexClient indexClient) throws IOException {
-        IndexSearchOptions options = new IndexSearchOptions();
+        SearchOptions options = new SearchOptions();
         options.setIncludeCount(true);
         options.setFilter("rating lt 13 and category/any(c: c eq 'aaa')");
         options.setOrderby("created");
@@ -111,11 +110,11 @@ public class App
         options.setRequireAllTerms(true);
         options.setMinimumCoverage(0.75);
 
-        IndexSearchResult result = indexClient.search("second name", options);
+        SearchResult result = indexClient.search("second name", options);
 
         // list search hits
         System.out.printf("Found %s hits, coverage: %s\n", result.getCount(), result.getCoverage() == null ? "-" : result.getCoverage());
-        for (IndexSearchResult.SearchHit hit: result.getHits()) {
+        for (SearchResult.SearchHit hit: result.getHits()) {
             System.out.printf("\tid: %s, name: %s, score: %s\n",
                     hit.getDocument().get("id"), hit.getDocument().get("name"), hit.getScore());
         }
@@ -123,7 +122,7 @@ public class App
         // list facets
         for (String field: result.getFacets().keySet()) {
             System.out.println(field + ":");
-            for (IndexSearchResult.FacetValue value: result.getFacets().get(field)) {
+            for (SearchResult.FacetValue value: result.getFacets().get(field)) {
                 if (value.getValue() != null) {
                     System.out.printf("\t%s: %s\n", value.getValue(), value.getCount());
                 }
@@ -146,11 +145,11 @@ public class App
     }
 
     static void suggest(SearchIndexClient indexClient) throws IOException {
-        IndexSuggestOptions options = new IndexSuggestOptions();
+        SuggestOptions options = new SuggestOptions();
         options.setFuzzy(true);
-        IndexSuggestResult result = indexClient.suggest("secp", "sg", options);
+        SuggestResult result = indexClient.suggest("secp", "sg", options);
         System.out.println("Suggest results, coverage: " + (result.getCoverage() == null ? "-" : result.getCoverage().toString()));
-        for (IndexSuggestResult.SuggestHit hit: result.getHits()) {
+        for (SuggestResult.SuggestHit hit: result.getHits()) {
             System.out.printf("\ttext: %s (id: %s)\n", hit.getText(), hit.getDocument().get("id"));
         }
     }

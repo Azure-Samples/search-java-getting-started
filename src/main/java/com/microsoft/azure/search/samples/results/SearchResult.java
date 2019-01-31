@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @JsonIgnoreProperties(value = { "@odata.context" })
-public class IndexSearchResult {
+public class SearchResult {
     private Collection<SearchHit> hits;
     private long count;
     private String nextLink;
     private Double coverage;
     private FacetsResult facets;
 
-    public IndexSearchResult() {
+    public SearchResult() {
         count = -1;
     }
 
