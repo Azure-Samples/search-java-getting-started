@@ -1,9 +1,17 @@
-package com.microsoft.azure.search.samples.console;
+package com.microsoft.azure.search.samples.demo;
 
-import com.microsoft.azure.search.samples.*;
+import com.microsoft.azure.search.samples.client.SearchIndexClient;
+import com.microsoft.azure.search.samples.demo.IndexBatchOperation;
+import com.microsoft.azure.search.samples.index.IndexDefinition;
+import com.microsoft.azure.search.samples.index.IndexField;
+import com.microsoft.azure.search.samples.options.IndexSearchOptions;
+import com.microsoft.azure.search.samples.options.IndexSuggestOptions;
+import com.microsoft.azure.search.samples.results.IndexBatchOperationResult;
+import com.microsoft.azure.search.samples.results.IndexBatchResult;
+import com.microsoft.azure.search.samples.results.IndexSearchResult;
+import com.microsoft.azure.search.samples.results.IndexSuggestResult;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.util.*;
 

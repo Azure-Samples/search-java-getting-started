@@ -1,4 +1,4 @@
-package com.microsoft.azure.search.samples;
+package com.microsoft.azure.search.samples.results;
 
 public class IndexBatchOperationResult {
     private String key;

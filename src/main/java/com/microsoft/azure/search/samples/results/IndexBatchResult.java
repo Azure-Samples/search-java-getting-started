@@ -1,4 +1,4 @@
-package com.microsoft.azure.search.samples;
+package com.microsoft.azure.search.samples.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

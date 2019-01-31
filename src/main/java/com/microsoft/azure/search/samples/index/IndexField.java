@@ -1,4 +1,4 @@
-package com.microsoft.azure.search.samples;
+package com.microsoft.azure.search.samples.index;
 
 public class IndexField {
     private String name;

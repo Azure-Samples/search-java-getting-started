@@ -1,29 +1,15 @@
-package com.microsoft.azure.search.samples;
+package com.microsoft.azure.search.samples.options;
 
-public class IndexSearchOptions {
-    private boolean includeCount;
+public class IndexSuggestOptions {
     private String filter;
     private String orderby;
     private String select;
     private String searchFields;
-    private String[] facets;
-    private String highlight;
     private String highlightPreTag;
     private String highlightPostTag;
-    private String scoringProfile;
-    private String[] scoringParameters;
     private Integer top;
-    private Integer skip;
-    private boolean requireAllTerms;
     private Double minimumCoverage;
-
-    public boolean getIncludeCount() {
-        return includeCount;
-    }
-
-    public void setIncludeCount(boolean includeCount) {
-        this.includeCount = includeCount;
-    }
+    private boolean fuzzy;
 
     public String getFilter() {
         return filter;
@@ -57,22 +43,6 @@ public class IndexSearchOptions {
         this.searchFields = searchFields;
     }
 
-    public String[] getFacets() {
-        return facets;
-    }
-
-    public void setFacets(String[] facets) {
-        this.facets = facets;
-    }
-
-    public String getHighlight() {
-        return highlight;
-    }
-
-    public void setHighlight(String highlight) {
-        this.highlight = highlight;
-    }
-
     public String getHighlightPreTag() {
         return highlightPreTag;
     }
@@ -89,20 +59,12 @@ public class IndexSearchOptions {
         this.highlightPostTag = highlightPostTag;
     }
 
-    public String getScoringProfile() {
-        return scoringProfile;
+    public boolean getFuzzy() {
+        return fuzzy;
     }
 
-    public void setScoringProfile(String scoringProfile) {
-        this.scoringProfile = scoringProfile;
-    }
-
-    public String[] getScoringParameters() {
-        return scoringParameters;
-    }
-
-    public void setScoringParameters(String[] scoringParameters) {
-        this.scoringParameters = scoringParameters;
+    public void setFuzzy(boolean fuzzy) {
+        this.fuzzy = fuzzy;
     }
 
     public Integer getTop() {
@@ -111,22 +73,6 @@ public class IndexSearchOptions {
 
     public void setTop(Integer top) {
         this.top = top;
-    }
-
-    public Integer getSkip() {
-        return skip;
-    }
-
-    public void setSkip(Integer skip) {
-        this.skip = skip;
-    }
-
-    public boolean getRequireAllTerms() {
-        return requireAllTerms;
-    }
-
-    public void setRequireAllTerms(boolean requireAllTerms) {
-        this.requireAllTerms = requireAllTerms;
     }
 
     public Double getMinimumCoverage() {

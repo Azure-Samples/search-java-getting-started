@@ -1,7 +1,5 @@
-package com.microsoft.azure.search.samples;
+package com.microsoft.azure.search.samples.demo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.HashMap;

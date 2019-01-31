@@ -1,14 +1,20 @@
-package com.microsoft.azure.search.samples;
+package com.microsoft.azure.search.samples.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.microsoft.azure.search.samples.demo.IndexBatchOperation;
+import com.microsoft.azure.search.samples.results.IndexBatchResult;
+import com.microsoft.azure.search.samples.results.IndexSearchResult;
+import com.microsoft.azure.search.samples.results.IndexSuggestResult;
+import com.microsoft.azure.search.samples.index.IndexDefinition;
+import com.microsoft.azure.search.samples.options.IndexSearchOptions;
+import com.microsoft.azure.search.samples.options.IndexSuggestOptions;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class SearchIndexClient {
