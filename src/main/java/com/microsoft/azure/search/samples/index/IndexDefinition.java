@@ -1,65 +1,22 @@
 package com.microsoft.azure.search.samples.index;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.auto.value.AutoValue;
 
-public class IndexDefinition {
-    private String name;
-    private ArrayList<IndexField> fields;
-    private ArrayList<Suggester> suggesters;
+import java.util.List;
 
-    public IndexDefinition() {
-        fields = new ArrayList<IndexField>();
-        suggesters = new ArrayList<Suggester>();
-    }
+@AutoValue
+public abstract class IndexDefinition {
+    public abstract String name();
 
-    public String getName() {
-        return this.name;
-    }
+    public abstract List<IndexField> fields();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public abstract List<Suggester> suggesters();
 
-    public Collection<IndexField> getFields() {
-        return this.fields;
-    }
-
-    public Collection<Suggester> getSuggesters() {
-        return suggesters;
-    }
-
-    public static class Suggester {
-        private String name;
-        private String searchMode;
-        private String[] sourceFields;
-
-        public Suggester() {
-            searchMode = "analyzingInfixMatching"; // only allowed value as of version 2015-02-28
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getSearchMode() {
-            return searchMode;
-        }
-
-        public void setSearchMode(String searchMode) {
-            this.searchMode = searchMode;
-        }
-
-        public String[] getSourceFields() {
-            return sourceFields;
-        }
-
-        public void setSourceFields(String[] sourceFields) {
-            this.sourceFields = sourceFields;
-        }
+    @JsonCreator
+    public static IndexDefinition create(@JsonProperty("name") String name,
+            @JsonProperty("fields") List<IndexField> fields, @JsonProperty("suggesters") List<Suggester> suggesters) {
+        return new com.microsoft.azure.search.samples.index.AutoValue_IndexDefinition(name, fields, suggesters);
     }
 }

@@ -1,104 +1,60 @@
 package com.microsoft.azure.search.samples.index;
 
-public class IndexField {
-    private String name;
-    private String type;
-    private String analyzer;
-    private boolean searchable;
-    private boolean filterable;
-    private boolean retrievable;
-    private boolean sortable;
-    private boolean facetable;
-    private boolean key;
+import com.google.auto.value.AutoValue;
 
-    public IndexField() {
-        this.retrievable = true;
+import javax.annotation.Nullable;
+
+@AutoValue
+public abstract class IndexField {
+    public abstract String name();
+
+    public abstract String type();
+
+    @Nullable
+    public abstract String analyzer();
+
+    @Nullable
+    public abstract Boolean searchable();
+
+    @Nullable
+    public abstract Boolean filterable();
+
+    @Nullable
+    public abstract Boolean retrievable();
+
+    @Nullable
+    public abstract Boolean sortable();
+
+    @Nullable
+    public abstract Boolean facetable();
+
+    @Nullable
+    public abstract Boolean key();
+
+    public static Builder builder(String name, String type) {
+        return new com.microsoft.azure.search.samples.index.AutoValue_IndexField.Builder().name(name).type(type);
     }
 
-    public IndexField(String name, String type) {
-        this();
-        this.name = name;
-        this.type = type;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder name(String name);
 
-    public String getName() {
-        return name;
-    }
+        public abstract Builder type(String type);
 
-    public IndexField setName(String name) {
-        this.name = name;
-        return this;
-    }
+        public abstract Builder analyzer(String analyzer);
 
-    public String getType() {
-        return type;
-    }
+        public abstract Builder searchable(Boolean searchable);
 
-    public IndexField setType(String type) {
-        this.type = type;
-        return this;
-    }
+        public abstract Builder filterable(Boolean filterable);
 
-    public String getAnalyzer() {
-        return analyzer;
-    }
+        public abstract Builder retrievable(Boolean retrievable);
 
-    public IndexField setAnalyzer(String analyzer) {
-        this.analyzer = analyzer;
-        return this;
-    }
+        public abstract Builder sortable(Boolean sortable);
 
-    public boolean isSearchable() {
-        return searchable;
-    }
+        public abstract Builder facetable(Boolean facetable);
 
-    public IndexField setSearchable(boolean searchable) {
-        this.searchable = searchable;
-        return this;
-    }
+        public abstract Builder key(Boolean key);
 
-    public boolean isFilterable() {
-        return filterable;
-    }
-
-    public IndexField setFilterable(boolean filterable) {
-        this.filterable = filterable;
-        return this;
-    }
-
-    public boolean isRetrievable() {
-        return retrievable;
-    }
-
-    public IndexField setRetrievable(boolean retrievable) {
-        this.retrievable = retrievable;
-        return this;
-    }
-
-    public boolean isSortable() {
-        return sortable;
-    }
-
-    public IndexField setSortable(boolean sortable) {
-        this.sortable = sortable;
-        return this;
-    }
-
-    public boolean isFacetable() {
-        return facetable;
-    }
-
-    public IndexField setFacetable(boolean facetable) {
-        this.facetable = facetable;
-        return this;
-    }
-
-    public boolean isKey() {
-        return key;
-    }
-
-    public IndexField setKey(boolean key) {
-        this.key = key;
-        return this;
+        public abstract IndexField build();
     }
 }

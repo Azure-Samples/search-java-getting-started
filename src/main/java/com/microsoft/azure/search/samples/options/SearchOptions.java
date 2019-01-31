@@ -1,139 +1,82 @@
 package com.microsoft.azure.search.samples.options;
 
-public class SearchOptions {
-    private boolean includeCount;
-    private String filter;
-    private String orderby;
-    private String select;
-    private String searchFields;
-    private String[] facets;
-    private String highlight;
-    private String highlightPreTag;
-    private String highlightPostTag;
-    private String scoringProfile;
-    private String[] scoringParameters;
-    private Integer top;
-    private Integer skip;
-    private boolean requireAllTerms;
-    private Double minimumCoverage;
+import com.google.auto.value.AutoValue;
 
-    public boolean getIncludeCount() {
-        return includeCount;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@AutoValue
+public abstract class SearchOptions {
+    public abstract Optional<Boolean> includeCount();
+
+    public abstract Optional<String> filter();
+
+    public abstract Optional<String> orderBy();
+
+    public abstract Optional<String> select();
+
+    public abstract Optional<String> searchFields();
+
+    public abstract List<String> facets();
+
+    public abstract Optional<String> highlight();
+
+    public abstract Optional<String> highlightPreTag();
+
+    public abstract Optional<String> highlightPostTag();
+
+    public abstract Optional<String> scoringProfile();
+
+    public abstract List<String> scoringParameters();
+
+    public abstract Optional<Integer> top();
+
+    public abstract Optional<Integer> skip();
+
+    public abstract Boolean requireAllTerms();
+
+    public abstract Optional<Double> minimumCoverage();
+
+    public static Builder builder() {
+        return new com.microsoft.azure.search.samples.options.AutoValue_SearchOptions.Builder()
+                .facets(new ArrayList<>())
+                .scoringParameters(new ArrayList<>())
+                .requireAllTerms(false);
     }
 
-    public void setIncludeCount(boolean includeCount) {
-        this.includeCount = includeCount;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder includeCount(boolean includeCount);
 
-    public String getFilter() {
-        return filter;
-    }
+        public abstract Builder filter(String filter);
 
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
+        public abstract Builder orderBy(String orderBy);
 
-    public String getOrderby() {
-        return orderby;
-    }
+        public abstract Builder select(String select);
 
-    public void setOrderby(String orderby) {
-        this.orderby = orderby;
-    }
+        public abstract Builder searchFields(String searchFields);
 
-    public String getSelect() {
-        return select;
-    }
+        public abstract Builder facets(List<String> facets);
 
-    public void setSelect(String select) {
-        this.select = select;
-    }
+        public abstract Builder highlight(String highlight);
 
-    public String getSearchFields() {
-        return searchFields;
-    }
+        public abstract Builder highlightPreTag(String highlightPreTag);
 
-    public void setSearchFields(String searchFields) {
-        this.searchFields = searchFields;
-    }
+        public abstract Builder highlightPostTag(String highlightPostTag);
 
-    public String[] getFacets() {
-        return facets;
-    }
+        public abstract Builder scoringProfile(String scoringProfile);
 
-    public void setFacets(String[] facets) {
-        this.facets = facets;
-    }
+        public abstract Builder scoringParameters(List<String> scoringParameters);
 
-    public String getHighlight() {
-        return highlight;
-    }
+        public abstract Builder top(Integer top);
 
-    public void setHighlight(String highlight) {
-        this.highlight = highlight;
-    }
+        public abstract Builder skip(Integer skip);
 
-    public String getHighlightPreTag() {
-        return highlightPreTag;
-    }
+        public abstract Builder requireAllTerms(Boolean requireAllTerms);
 
-    public void setHighlightPreTag(String highlightPreTag) {
-        this.highlightPreTag = highlightPreTag;
-    }
+        public abstract Builder minimumCoverage(Double minimumCoverage);
 
-    public String getHighlightPostTag() {
-        return highlightPostTag;
-    }
-
-    public void setHighlightPostTag(String highlightPostTag) {
-        this.highlightPostTag = highlightPostTag;
-    }
-
-    public String getScoringProfile() {
-        return scoringProfile;
-    }
-
-    public void setScoringProfile(String scoringProfile) {
-        this.scoringProfile = scoringProfile;
-    }
-
-    public String[] getScoringParameters() {
-        return scoringParameters;
-    }
-
-    public void setScoringParameters(String[] scoringParameters) {
-        this.scoringParameters = scoringParameters;
-    }
-
-    public Integer getTop() {
-        return top;
-    }
-
-    public void setTop(Integer top) {
-        this.top = top;
-    }
-
-    public Integer getSkip() {
-        return skip;
-    }
-
-    public void setSkip(Integer skip) {
-        this.skip = skip;
-    }
-
-    public boolean getRequireAllTerms() {
-        return requireAllTerms;
-    }
-
-    public void setRequireAllTerms(boolean requireAllTerms) {
-        this.requireAllTerms = requireAllTerms;
-    }
-
-    public Double getMinimumCoverage() {
-        return minimumCoverage;
-    }
-
-    public void setMinimumCoverage(Double minimumCoverage) {
-        this.minimumCoverage = minimumCoverage;
+        public abstract SearchOptions build();
     }
 }

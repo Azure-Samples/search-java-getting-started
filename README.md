@@ -10,7 +10,7 @@ This is a sample of how to interact with Azure Search using Java.  Not only does
 
 ## Running this sample
 
-To run this sample, you will need to have an Azure Search service and add your Search Service name as well as API key for your Search service tot he App.java file located under \src\main\java\com\microsoft\azure\search\samples\console.  After that, you should be able to simply load it and run it.  One thing to note is that you will need to have JDK 1.7 or higher.   
+To run this sample, you will need to have an Azure Search service and add your Search Service name as well as API key for your Search service tot he App.java file located under \src\main\java\com\microsoft\azure\search\samples\demo.  After that, you should be able to simply load it and run it.  One thing to note is that you will need to have JDK 8 or higher.   
 
 When you run the sample, it will do the following:
 * Create an Index - createIndex(indexClient, true);

@@ -1,29 +1,24 @@
 package com.microsoft.azure.search.samples.results;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.auto.value.AutoValue;
 
-import java.util.Collection;
+import javax.annotation.Nullable;
+import java.util.List;
 
+@AutoValue
 @JsonIgnoreProperties(value = { "@odata.context" })
-public class IndexBatchResult {
-    private Collection<IndexBatchOperationResult> value;
-    private int status;
+public abstract class IndexBatchResult {
+    public abstract List<IndexBatchOperationResult> value();
 
-    public Collection<IndexBatchOperationResult> getOperationResults() {
-        return value;
-    }
+    @Nullable
+    public abstract Integer status();
 
-    @JsonProperty("value")
-    public void setOperationResults(Collection<IndexBatchOperationResult> value) {
-        this.value = value;
-    }
-
-    public int getHttpStatus() {
-        return status;
-    }
-
-    public void setHttpStatus(int status) {
-        this.status = status;
+    @JsonCreator
+    public static IndexBatchResult create(@JsonProperty("value") List<IndexBatchOperationResult> value,
+            @JsonProperty("status") Integer status) {
+        return new com.microsoft.azure.search.samples.results.AutoValue_IndexBatchResult(value, status);
     }
 }

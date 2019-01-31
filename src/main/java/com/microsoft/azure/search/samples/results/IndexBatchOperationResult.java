@@ -1,40 +1,28 @@
 package com.microsoft.azure.search.samples.results;
 
-public class IndexBatchOperationResult {
-    private String key;
-    private boolean status;
-    private String errorMessage;
-    private int statusCode;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.auto.value.AutoValue;
 
-    public String getKey() {
-        return key;
-    }
+import javax.annotation.Nullable;
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+@AutoValue
+public abstract class IndexBatchOperationResult {
+    public abstract String key();
 
-    public boolean getStatus() {
-        return status;
-    }
+    public abstract boolean status();
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+    @Nullable
+    public abstract String errorMessage();
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+    public abstract int statusCode();
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public int getStatusCode() {
-        return this.statusCode;
-    }
-
-    public void setStatusCode(int status) { 
-        this.statusCode = statusCode; 
+    @JsonCreator
+    public static IndexBatchOperationResult create(@JsonProperty("key") String key,
+            @JsonProperty("status") boolean status, @JsonProperty("errorMessage") String errorMessage,
+            @JsonProperty("statusCode") int statusCode) {
+        return new com.microsoft.azure.search.samples.results.AutoValue_IndexBatchOperationResult(key, status,
+                                                                                                  errorMessage,
+                                                                                                  statusCode);
     }
 }

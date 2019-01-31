@@ -1,85 +1,53 @@
 package com.microsoft.azure.search.samples.options;
 
-public class SuggestOptions {
-    private String filter;
-    private String orderby;
-    private String select;
-    private String searchFields;
-    private String highlightPreTag;
-    private String highlightPostTag;
-    private Integer top;
-    private Double minimumCoverage;
-    private boolean fuzzy;
+import com.google.auto.value.AutoValue;
 
-    public String getFilter() {
-        return filter;
+import java.util.Optional;
+
+@AutoValue
+public abstract class SuggestOptions {
+    public abstract Optional<String> filter();
+
+    public abstract Optional<String> orderby();
+
+    public abstract Optional<String> select();
+
+    public abstract Optional<String> searchFields();
+
+    public abstract Optional<String> highlightPreTag();
+
+    public abstract Optional<String> highlightPostTag();
+
+    public abstract Optional<Integer> top();
+
+    public abstract Optional<Double> minimumCoverage();
+
+    public abstract Boolean fuzzy();
+
+    public static Builder builder() {
+        return new com.microsoft.azure.search.samples.options.AutoValue_SuggestOptions.Builder().fuzzy(false);
     }
 
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder filter(String filter);
 
-    public String getOrderby() {
-        return orderby;
-    }
+        public abstract Builder orderby(String orderBy);
 
-    public void setOrderby(String orderby) {
-        this.orderby = orderby;
-    }
+        public abstract Builder select(String select);
 
-    public String getSelect() {
-        return select;
-    }
+        public abstract Builder searchFields(String searchFields);
 
-    public void setSelect(String select) {
-        this.select = select;
-    }
+        public abstract Builder highlightPreTag(String highlightPreTag);
 
-    public String getSearchFields() {
-        return searchFields;
-    }
+        public abstract Builder highlightPostTag(String highlightPostTag);
 
-    public void setSearchFields(String searchFields) {
-        this.searchFields = searchFields;
-    }
+        public abstract Builder top(Integer top);
 
-    public String getHighlightPreTag() {
-        return highlightPreTag;
-    }
+        public abstract Builder minimumCoverage(Double minimumCoverage);
 
-    public void setHighlightPreTag(String highlightPreTag) {
-        this.highlightPreTag = highlightPreTag;
-    }
+        public abstract Builder fuzzy(Boolean fuzzy);
 
-    public String getHighlightPostTag() {
-        return highlightPostTag;
-    }
-
-    public void setHighlightPostTag(String highlightPostTag) {
-        this.highlightPostTag = highlightPostTag;
-    }
-
-    public boolean getFuzzy() {
-        return fuzzy;
-    }
-
-    public void setFuzzy(boolean fuzzy) {
-        this.fuzzy = fuzzy;
-    }
-
-    public Integer getTop() {
-        return top;
-    }
-
-    public void setTop(Integer top) {
-        this.top = top;
-    }
-
-    public Double getMinimumCoverage() {
-        return minimumCoverage;
-    }
-
-    public void setMinimumCoverage(Double minimumCoverage) {
-        this.minimumCoverage = minimumCoverage;
+        public abstract SuggestOptions build();
     }
 }
