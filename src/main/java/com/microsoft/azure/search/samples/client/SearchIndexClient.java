@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchIndexClient {
-    private static final String API_VERSION = "2016-09-01";
+    private static final String API_VERSION = "2017-11-11";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new Jdk8Module()).setDateFormat(
             new ISO8601DateFormat());
 
@@ -41,7 +41,7 @@ public class SearchIndexClient {
         this.apiKey = apiKey;
     }
 
-    public boolean isIndexExists() throws IOException {
+    public boolean doesIndexExist() throws IOException {
         HttpURLConnection connection = httpRequest(buildIndexDefinitionUrl(), "GET");
         int response = connection.getResponseCode();
         if (response == HttpURLConnection.HTTP_NOT_FOUND) {
@@ -242,8 +242,8 @@ public class SearchIndexClient {
     }
 
     private static <T> T withHttpRetry(RetriableHttpOperation<T> r) throws IOException {
-        int maxRetries = 3;
-        int delayInMilliSec = 30000;
+        final int maxRetries = 3;
+        final int delayInMilliSec = 30000;
         int count = 0;
         T result;
         while (true) {

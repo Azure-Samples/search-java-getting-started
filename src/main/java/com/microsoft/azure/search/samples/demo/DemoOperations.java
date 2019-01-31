@@ -37,7 +37,7 @@ class DemoOperations {
 
         // Indexes may be created via the management UI in portal.azure.com or via APIs. In addition to field
         // details index definitions include options for custom scoring, suggesters and more
-        if (!client.isIndexExists()) {
+        if (!client.doesIndexExist()) {
             List<IndexField> fields = Arrays.asList(IndexField.builder("id", "Edm.String").key(true).build(),
                                                     IndexField.builder("name", "Edm.String").searchable(true)
                                                             .analyzer("en.lucene").build(),
