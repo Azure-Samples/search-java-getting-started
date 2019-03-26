@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchIndexClient {
-    private static final String API_VERSION = "2017-11-11";
+    private static final String API_VERSION = "2017-11-11-Preview";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new Jdk8Module()).setDateFormat(
             new ISO8601DateFormat());
 
@@ -60,8 +60,10 @@ public class SearchIndexClient {
     }
 
     public void deleteIndexIfExists() throws IOException {
-        HttpURLConnection connection = httpRequest(buildIndexDefinitionUrl(), "DELETE");
-        throwOnHttpError(connection);
+        if (doesIndexExist()) {
+            HttpURLConnection connection = httpRequest(buildIndexDefinitionUrl(), "DELETE");
+            throwOnHttpError(connection);
+        }
     }
 
     public IndexBatchResult indexBatch(final List<IndexOperation> operations) throws IOException {
