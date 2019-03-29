@@ -15,11 +15,11 @@ import com.microsoft.azure.search.samples.results.SuggestHit;
 import com.microsoft.azure.search.samples.results.SuggestResult;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -110,21 +110,29 @@ class DemoOperations {
     void indexData() throws IOException {
         // In this case we createIndex sample data in-memory. Typically this will come from another database, file or
         // API and will be turned into objects with the desired shape for indexing
-        List<IndexOperation> operations = new ArrayList<>();
-        Map<String, Object> catA = new HashMap<String, Object>() {{ put(ID, "A"); put(ROLE, "P1");}};
-        Map<String, Object> catB = new HashMap<String, Object>() {{ put(ID, "B"); put(ROLE, "E2");}};
-        Map<String, Object> catC = new HashMap<String, Object>() {{ put(ID, "C"); put(ROLE, "E1");}};
-        Map<String, Object> name1 = new HashMap<String, Object>() {{ put(FIRST, "Dave"); put(LAST, "Smith");}};
-        Map<String, Object> name2 = new HashMap<String, Object>() {{ put(FIRST, "David"); put(LAST, "Smith");}};
-        Map<String, Object> name3 = new HashMap<String, Object>() {{ put(FIRST, "Steve"); put(LAST, "Smith");}};
-        Map<String, Object> name4 = new HashMap<String, Object>() {{ put(FIRST, "Na"); put(LAST, "Smith");}};
-        operations.add(IndexOperation.uploadOperation(newDocument("1", name1, 10, catA, catB)));
-        operations.add(IndexOperation.uploadOperation(newDocument("2", name2, 11, catA, catC)));
-        operations.add(IndexOperation.uploadOperation(newDocument("3", name3, 12, catB, catC)));
-        operations.add(IndexOperation.uploadOperation(newDocument("4", name4, 13, catA)));
-        operations.add(IndexOperation.deleteOperation(ID, "3"));
+        Category cA = Category.create("A", "P1");
+        Category cB = Category.create("B", "E2");
+        Category cC = Category.create("C", "E1");
 
-        IndexBatchResult result = client.indexBatch(operations);
+        Fullname n1 = Fullname.create("Dave", "Smith");
+        Fullname n2 = Fullname.create("David", "Smith");
+        Fullname n3 = Fullname.create("Steve", "Smith");
+        Fullname n4 = Fullname.create("Na", "Smith");
+
+        String time = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
+        Employee e1 = Employee.create("1", n1, 10, time, Arrays.asList(cA, cB));
+        Employee e2 = Employee.create("2", n2, 10, time, Arrays.asList(cA, cC));
+        Employee e3 = Employee.create("3", n3, 10, time, Arrays.asList(cB, cC));
+        Employee e4 = Employee.create("4", n4, 10, time, Collections.singletonList(cA));
+
+        List<IndexOperation> ops = new ArrayList<>();
+        ops.add(IndexOperation.uploadOperation(e1));
+        ops.add(IndexOperation.uploadOperation(e2));
+        ops.add(IndexOperation.uploadOperation(e3));
+        ops.add(IndexOperation.uploadOperation(e4));
+        ops.add(IndexOperation.deleteOperation(ID, "3"));
+
+        IndexBatchResult result = client.indexBatch(ops);
         if (result.status() != null && result.status() ==  207) {
             System.out.print("handle partial success, check individual client status/error message");
         }
@@ -198,15 +206,5 @@ class DemoOperations {
         for (SuggestHit hit : result.hits()) {
             System.out.printf("\ttext: %s (id: %s)\n", hit.text(), hit.document().get(ID));
         }
-    }
-
-    private Map<String, Object> newDocument(String id, Map<String, Object> name, int rating, Map<String, Object>... categories) {
-        Map<String, Object> doc = new HashMap<>();
-        doc.put(ID, id);
-        doc.put(FULL_NAME, name);
-        doc.put(RATING, rating);
-        doc.put(CATEGORIES, categories);
-        doc.put(CREATED, new Date());
-        return doc;
     }
 }

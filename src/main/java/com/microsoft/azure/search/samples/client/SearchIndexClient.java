@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.microsoft.azure.search.samples.demo.IndexOperation;
 import com.microsoft.azure.search.samples.index.IndexDefinition;
@@ -28,8 +27,7 @@ import java.util.Map;
 
 public class SearchIndexClient {
     private static final String API_VERSION = "2017-11-11-Preview";
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new Jdk8Module()).setDateFormat(
-            new ISO8601DateFormat());
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new Jdk8Module());
 
     private final String serviceName;
     private final String indexName;

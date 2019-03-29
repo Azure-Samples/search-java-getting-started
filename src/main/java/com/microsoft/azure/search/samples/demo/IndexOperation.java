@@ -1,6 +1,7 @@
 package com.microsoft.azure.search.samples.demo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +22,8 @@ public class IndexOperation {
         return this.payload;
     }
 
-    static IndexOperation uploadOperation(Map<String, Object> document) {
-        Map<String, Object> map = new HashMap<>(document);
+    static IndexOperation uploadOperation(Object object) {
+        Map<String, Object> map = new ObjectMapper().convertValue(object, Map.class);
         map.put("@search.action", "upload");
         return new IndexOperation(map);
     }

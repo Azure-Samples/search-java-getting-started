@@ -32,7 +32,7 @@ public abstract class SimpleIndexField implements IndexField {
     public abstract Boolean key();
 
     public static Builder builder(String name, String type) {
-        return new com.microsoft.azure.search.samples.index.AutoValue_IndexField.Builder().name(name).type(type);
+        return new com.microsoft.azure.search.samples.index.AutoValue_SimpleIndexField.Builder().name(name).type(type);
     }
 
     @AutoValue.Builder
