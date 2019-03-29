@@ -1,5 +1,7 @@
 package com.microsoft.azure.search.samples.demo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.microsoft.azure.search.samples.client.SearchIndexClient;
 import com.microsoft.azure.search.samples.index.ComplexIndexField;
 import com.microsoft.azure.search.samples.index.IndexDefinition;
@@ -15,8 +17,6 @@ import com.microsoft.azure.search.samples.results.SuggestHit;
 import com.microsoft.azure.search.samples.results.SuggestResult;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,39 +24,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/* The following sample document illustrates the schema of indexed documents
-   [
-        {
-            "id": "2",
-            "rating": 11,
-            "created": "[TIME]",
-            "fullname": {
-                "first": "David",
-                "last": "Smith"
-            },
-            "categories": [
-                {
-                    "id": "A",
-                    "role": "P1"
-                },
-                {
-                    "id": "C",
-                    "role": "E1"
-                }
-            ]
-        }
-    ]
- */
+import static com.microsoft.azure.search.samples.demo.Address.CITY;
+import static com.microsoft.azure.search.samples.demo.Address.STATE;
+import static com.microsoft.azure.search.samples.demo.Address.STREET_ADDRESS;
+import static com.microsoft.azure.search.samples.demo.Address.ZIP_CODE;
+import static com.microsoft.azure.search.samples.demo.Hotel.CATEGORY;
+import static com.microsoft.azure.search.samples.demo.Hotel.HOTEL_ID;
+import static com.microsoft.azure.search.samples.demo.Hotel.HOTEL_NAME;
+import static com.microsoft.azure.search.samples.demo.Hotel.LAST_RENOVATION_DATE;
+import static com.microsoft.azure.search.samples.demo.Hotel.PARKING_INCLUDED;
+import static com.microsoft.azure.search.samples.demo.Hotel.RATING;
+import static com.microsoft.azure.search.samples.demo.Hotel.ROOMS;
+import static com.microsoft.azure.search.samples.demo.Room.BASE_RATE;
+import static com.microsoft.azure.search.samples.demo.Room.BED_OPTIONS;
+import static com.microsoft.azure.search.samples.demo.Room.DESCRIPTION;
+import static com.microsoft.azure.search.samples.demo.Room.DESCRIPTION_FR;
+import static com.microsoft.azure.search.samples.demo.Room.SLEEPS_COUNT;
+import static com.microsoft.azure.search.samples.demo.Room.SMOKING_ALLOWED;
+import static com.microsoft.azure.search.samples.demo.Room.TAGS;
+import static com.microsoft.azure.search.samples.demo.Room.TYPE;
+
 class DemoOperations {
-    private static final String INDEX_NAME = "sample";
-    private static final String ID = "id";
-    private static final String ROLE = "role";
-    private static final String FIRST = "first";
-    private static final String LAST = "last";
-    private static final String FULL_NAME = "fullname";
-    private static final String CATEGORIES = "categories";
-    private static final String CREATED = "created";
-    private static final String RATING = "rating";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new Jdk8Module());
+    private static final String INDEX_NAME = "hotels";
     private SearchIndexClient client;
 
     DemoOperations(String serviceName, String apiKey) {
@@ -71,66 +61,117 @@ class DemoOperations {
         client.deleteIndexIfExists();
 
         if (!client.doesIndexExist()) {
-            IndexField fullName = ComplexIndexField.create(FULL_NAME,
-                                                           Arrays.asList(
-                                                                       SimpleIndexField.builder(FIRST, "Edm.String")
-                                                                               .searchable(true)
-                                                                               .analyzer("en.lucene")
-                                                                               .build(),
-                                                                       SimpleIndexField.builder(LAST, "Edm.String")
-                                                                               .searchable(true)
-                                                                               .analyzer("en.lucene")
-                                                                               .build()
-                                                               ),
-                                                           false);
-            IndexField categories = ComplexIndexField.create(CATEGORIES,
-                                                             Arrays.asList(
-                                                                     SimpleIndexField.builder(ID, "Edm.String")
-                                                                             .filterable(true).facetable(true)
-                                                                             .build(),
-                                                                     SimpleIndexField.builder(ROLE, "Edm.String")
-                                                                             .build()
-                                                             ),
-                                                             true);
-            List<IndexField> fields = Arrays.asList(SimpleIndexField.builder(ID, "Edm.String").key(true).build(),
-                                                    fullName,
-                                                    categories,
-                                                    SimpleIndexField.builder(RATING, "Edm.Int32").filterable(true)
+            List<IndexField> fields = Arrays.asList(SimpleIndexField.builder(HOTEL_ID, "Edm.String").key(true)
+                                                            .filterable(true).build(),
+                                                    SimpleIndexField.builder(HOTEL_NAME, "Edm.String")
+                                                            .searchable(true).build(),
+                                                    SimpleIndexField.builder(DESCRIPTION, "Edm.String")
+                                                            .searchable(true).build(),
+                                                    SimpleIndexField.builder(DESCRIPTION_FR, "Edm.String")
+                                                            .searchable(true).analyzer("fr.lucene").build(),
+                                                    SimpleIndexField.builder(CATEGORY, "Edm.String")
+                                                            .searchable(true).filterable(true).sortable(true)
                                                             .facetable(true).build(),
-                                                    SimpleIndexField.builder(CREATED, "Edm.DateTimeOffset")
-                                                            .filterable(true).sortable(true).facetable(true).build());
+                                                    SimpleIndexField.builder(TAGS, "Collection(Edm.String)")
+                                                            .searchable(true).filterable(true).facetable(true).build(),
+                                                    SimpleIndexField.builder(PARKING_INCLUDED, "Edm.Boolean")
+                                                            .filterable(true).facetable(true).build(),
+                                                    SimpleIndexField.builder(SMOKING_ALLOWED, "Edm.Boolean")
+                                                            .filterable(true).facetable(true).build(),
+                                                    SimpleIndexField.builder(LAST_RENOVATION_DATE, "Edm.DateTimeOffset")
+                                                            .filterable(true).sortable(true).facetable(true).build(),
+                                                    SimpleIndexField.builder(RATING, "Edm.Double")
+                                                            .filterable(true).sortable(true).facetable(true).build(),
+                                                    defineAddressField(),
+                                                    defineRoomsField());
 
-            Suggester suggester = Suggester.create("sg", "analyzingInfixMatching", Collections.singletonList
-                    (FULL_NAME + "/" + FIRST));
+            Suggester suggester = Suggester.create("sg", "analyzingInfixMatching",
+                                                   Collections.singletonList(HOTEL_NAME));
 
             client.createIndex(IndexDefinition.create(INDEX_NAME, fields, Collections.singletonList(suggester)));
         }
     }
 
+    private ComplexIndexField defineAddressField() {
+        return ComplexIndexField
+                .create("Address",
+                        Arrays.asList(
+                                SimpleIndexField
+                                        .builder(STREET_ADDRESS, "Edm.String")
+                                        .searchable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(CITY, "Edm.String")
+                                        .searchable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(STATE, "Edm.String")
+                                        .searchable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(ZIP_CODE, "Edm.String")
+                                        .searchable(true)
+                                        .build()
+                        ),
+                        false);
+    }
+
+    private ComplexIndexField defineRoomsField() {
+        return ComplexIndexField
+                .create("Rooms",
+                        Arrays.asList(
+                                SimpleIndexField
+                                        .builder(DESCRIPTION, "Edm.String")
+                                        .searchable(true)
+                                        .analyzer("en.lucene")
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(DESCRIPTION_FR, "Edm.String")
+                                        .searchable(true)
+                                        .analyzer("fr.lucene")
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(TYPE, "Edm.String")
+                                        .searchable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(BASE_RATE, "Edm.Double")
+                                        .filterable(true)
+                                        .facetable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(BED_OPTIONS, "Edm.String")
+                                        .searchable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(SLEEPS_COUNT, "Edm.Int32")
+                                        .filterable(true)
+                                        .facetable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(SMOKING_ALLOWED, "Edm.Boolean")
+                                        .filterable(true)
+                                        .facetable(true)
+                                        .build(),
+                                SimpleIndexField
+                                        .builder(TAGS, "Collection(Edm.String)")
+                                        .searchable(true)
+                                        .filterable(true)
+                                        .facetable(true)
+                                        .build()
+                        ),
+                        true);
+    }
+
     void indexData() throws IOException {
         // In this case we createIndex sample data in-memory. Typically this will come from another database, file or
         // API and will be turned into objects with the desired shape for indexing
-        Category cA = Category.create("A", "P1");
-        Category cB = Category.create("B", "E2");
-        Category cC = Category.create("C", "E1");
-
-        Fullname n1 = Fullname.create("Dave", "Smith");
-        Fullname n2 = Fullname.create("David", "Smith");
-        Fullname n3 = Fullname.create("Steve", "Smith");
-        Fullname n4 = Fullname.create("Na", "Smith");
-
-        String time = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
-        Employee e1 = Employee.create("1", n1, 10, time, Arrays.asList(cA, cB));
-        Employee e2 = Employee.create("2", n2, 10, time, Arrays.asList(cA, cC));
-        Employee e3 = Employee.create("3", n3, 10, time, Arrays.asList(cB, cC));
-        Employee e4 = Employee.create("4", n4, 10, time, Collections.singletonList(cA));
-
         List<IndexOperation> ops = new ArrayList<>();
-        ops.add(IndexOperation.uploadOperation(e1));
-        ops.add(IndexOperation.uploadOperation(e2));
-        ops.add(IndexOperation.uploadOperation(e3));
-        ops.add(IndexOperation.uploadOperation(e4));
-        ops.add(IndexOperation.deleteOperation(ID, "3"));
+        for (String id : new String[] { "hotel1", "hotel10","hotel11", "hotel12", "hotel13"}) {
+            Hotel hotel = OBJECT_MAPPER.readValue(getClass().getResource("/" + id), Hotel.class);
+            ops.add(IndexOperation.uploadOperation(hotel));
+        }
+        ops.add(IndexOperation.deleteOperation(HOTEL_ID, "1"));
 
         IndexBatchResult result = client.indexBatch(ops);
         if (result.status() != null && result.status() ==  207) {
@@ -143,38 +184,37 @@ class DemoOperations {
 
     void searchSimple() throws IOException {
         SearchOptions options = SearchOptions.builder().includeCount(true).build();
-        SearchResult result = client.search("Smith", options);
+        SearchResult result = client.search("Lobby", options);
         System.out.printf("Found %s hits\n", result.count());
         for (SearchResult.SearchHit hit : result.hits()) {
-            System.out.printf("\tid: %s, name: %s, score: %s\n", hit.document().get(ID),
-                              hit.document().get(FULL_NAME), hit.score());
+            System.out.printf("\tid: %s, name: %s, score: %s\n", hit.document().get(HOTEL_ID),
+                              hit.document().get(HOTEL_NAME), hit.score());
         }
     }
 
     void searchAllFeatures() throws IOException {
         SearchOptions options = SearchOptions.builder()
                 .includeCount(true)
-                .filter("rating lt 13 and categories/any(c: c/id eq 'A')")
-                .orderBy(CREATED)
-                .select("id,fullname,categories,created")
-                .searchFields(FULL_NAME + "/last")
-                .facets(Arrays.asList("rating,values:11|13", "categories/id", CREATED))
-                .highlight(FULL_NAME + "/last")
+                .filter("Rooms/all(r: r/BaseRate lt 260)")
+                .orderBy(LAST_RENOVATION_DATE + " desc")
+                .select(HOTEL_ID + "," + DESCRIPTION + "," + LAST_RENOVATION_DATE)
+                .searchFields(ROOMS + "/" + DESCRIPTION)
+                .facets(Arrays.asList(TAGS, RATING))
+                .highlight(HOTEL_NAME)
                 .highlightPreTag("*pre*")
                 .highlightPostTag("*post*")
                 .top(10)
-                .skip(1)
                 .requireAllTerms(true)
                 .minimumCoverage(0.75).build();
 
-        SearchResult result = client.search("Smith", options);
+        SearchResult result = client.search("Mountain", options);
 
         // list search hits
         System.out.printf("Found %s hits, coverage: %s\n", result.count(),
                           result.coverage() == null ? "-" : result.coverage());
         for (SearchResult.SearchHit hit : result.hits()) {
-            System.out.printf("\tid: %s, name: %s, score: %s\n", hit.document().get(ID),
-                              hit.document().get(FULL_NAME), hit.score());
+            System.out.printf("\tid: %s, name: %s, LastRenovationDate: %s\n", hit.document().get(HOTEL_ID),
+                              hit.document().get(DESCRIPTION), hit.document().get(LAST_RENOVATION_DATE));
         }
 
         // list facets
@@ -192,19 +232,19 @@ class DemoOperations {
     }
 
     void lookup() throws IOException {
-        Map<String, Object> document = client.lookup("2");
-        System.out.println("Document lookup, key='2'");
-        System.out.printf("\tname: %s\n", document.get(FULL_NAME));
-        System.out.printf("\tcreated: %s\n", document.get(CREATED));
+        Map<String, Object> document = client.lookup("10");
+        System.out.println("Document lookup, key='10'");
+        System.out.printf("\tname: %s\n", document.get(HOTEL_NAME));
+        System.out.printf("\trenovated: %s\n", document.get(LAST_RENOVATION_DATE));
         System.out.printf("\trating: %s\n", document.get(RATING));
     }
 
     void suggest() throws IOException {
         SuggestOptions options = SuggestOptions.builder().fuzzy(true).build();
-        SuggestResult result = client.suggest("dap", "sg", options);
+        SuggestResult result = client.suggest("res", "sg", options);
         System.out.println("Suggest results, coverage: " + result.coverage());
         for (SuggestHit hit : result.hits()) {
-            System.out.printf("\ttext: %s (id: %s)\n", hit.text(), hit.document().get(ID));
+            System.out.printf("\ttext: %s (id: %s)\n", hit.text(), hit.document().get(HOTEL_ID));
         }
     }
 }
