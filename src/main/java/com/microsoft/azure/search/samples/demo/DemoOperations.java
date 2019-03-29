@@ -61,29 +61,29 @@ class DemoOperations {
         client.deleteIndexIfExists();
 
         if (!client.doesIndexExist()) {
-            List<IndexField> fields = Arrays.asList(SimpleIndexField.builder(HOTEL_ID, "Edm.String").key(true)
-                                                            .filterable(true).build(),
-                                                    SimpleIndexField.builder(HOTEL_NAME, "Edm.String")
-                                                            .searchable(true).build(),
-                                                    SimpleIndexField.builder(DESCRIPTION, "Edm.String")
-                                                            .searchable(true).build(),
-                                                    SimpleIndexField.builder(DESCRIPTION_FR, "Edm.String")
-                                                            .searchable(true).analyzer("fr.lucene").build(),
-                                                    SimpleIndexField.builder(CATEGORY, "Edm.String")
-                                                            .searchable(true).filterable(true).sortable(true)
-                                                            .facetable(true).build(),
-                                                    SimpleIndexField.builder(TAGS, "Collection(Edm.String)")
-                                                            .searchable(true).filterable(true).facetable(true).build(),
-                                                    SimpleIndexField.builder(PARKING_INCLUDED, "Edm.Boolean")
-                                                            .filterable(true).facetable(true).build(),
-                                                    SimpleIndexField.builder(SMOKING_ALLOWED, "Edm.Boolean")
-                                                            .filterable(true).facetable(true).build(),
-                                                    SimpleIndexField.builder(LAST_RENOVATION_DATE, "Edm.DateTimeOffset")
-                                                            .filterable(true).sortable(true).facetable(true).build(),
-                                                    SimpleIndexField.builder(RATING, "Edm.Double")
-                                                            .filterable(true).sortable(true).facetable(true).build(),
-                                                    defineAddressField(),
-                                                    defineRoomsField());
+            List<IndexField> fields =
+                    Arrays.asList(SimpleIndexField.builder(HOTEL_ID, "Edm.String")
+                                          .key(true).filterable(true).build(),
+                                  SimpleIndexField.builder(HOTEL_NAME, "Edm.String")
+                                          .searchable(true).build(),
+                                  SimpleIndexField.builder(DESCRIPTION, "Edm.String")
+                                          .searchable(true).build(),
+                                  SimpleIndexField.builder(DESCRIPTION_FR, "Edm.String")
+                                          .searchable(true).analyzer("fr.lucene").build(),
+                                  SimpleIndexField.builder(CATEGORY, "Edm.String")
+                                          .searchable(true).filterable(true).sortable(true).facetable(true).build(),
+                                  SimpleIndexField.builder(TAGS, "Collection(Edm.String)")
+                                          .searchable(true).filterable(true).facetable(true).build(),
+                                  SimpleIndexField.builder(PARKING_INCLUDED, "Edm.Boolean")
+                                          .filterable(true).facetable(true).build(),
+                                  SimpleIndexField.builder(SMOKING_ALLOWED, "Edm.Boolean")
+                                          .filterable(true).facetable(true).build(),
+                                  SimpleIndexField.builder(LAST_RENOVATION_DATE, "Edm.DateTimeOffset")
+                                          .filterable(true).sortable(true).facetable(true).build(),
+                                  SimpleIndexField.builder(RATING, "Edm.Double")
+                                          .filterable(true).sortable(true).facetable(true).build(),
+                                  defineAddressField(),
+                                  defineRoomsField());
 
             Suggester suggester = Suggester.create("sg", "analyzingInfixMatching",
                                                    Collections.singletonList(HOTEL_NAME));
